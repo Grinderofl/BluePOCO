@@ -42,7 +42,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
+    <Compile Include="ApiTransformerTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -52,6 +52,10 @@
     <EmbeddedResource Include="Source.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ApiTransformer\ApiTransformer.csproj">
+      <Project>{E1794D4B-C7D9-496B-8A2E-982C7C2CF42D}</Project>
+      <Name>ApiTransformer</Name>
+    </ProjectReference>
     <ProjectReference Include="..\BluePOCO\BluePOCO.csproj">
       <Project>{BEA79CBA-5542-4202-B751-2D57A16EE0D4}</Project>
       <Name>BluePOCO</Name>

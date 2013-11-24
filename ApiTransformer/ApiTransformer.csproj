@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{BEA79CBA-5542-4202-B751-2D57A16EE0D4}</ProjectGuid>
+    <ProjectGuid>{E1794D4B-C7D9-496B-8A2E-982C7C2CF42D}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>BluePOCO</RootNamespace>
-    <AssemblyName>BluePOCO</AssemblyName>
+    <RootNamespace>ApiTransformer</RootNamespace>
+    <AssemblyName>ApiTransformer</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -30,12 +30,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Restcoration">
-      <HintPath>..\..\Restcoration\Restcoration\bin\Release\Restcoration.dll</HintPath>
-    </Reference>
-    <Reference Include="RestSharp">
-      <HintPath>..\packages\RestSharp.104.4.0\lib\net4\RestSharp.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -45,31 +39,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BlueprintTransformer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>BlueprintTransformer.tt</DependentUpon>
-    </Compile>
+    <Compile Include="ApiObject.cs" />
+    <Compile Include="Helpers.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="BlueprintTransformer.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>BlueprintTransformer.cs</LastGenOutput>
-    </None>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Source.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\ApiTransformer\ApiTransformer.csproj">
-      <Project>{e1794d4b-c7d9-496b-8a2e-982c7c2cf42d}</Project>
-      <Name>ApiTransformer</Name>
-    </ProjectReference>
+    <Compile Include="ResponseObject.cs" />
+    <Compile Include="Transformer.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

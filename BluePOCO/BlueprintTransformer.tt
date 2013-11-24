@@ -1,6 +1,9 @@
-﻿<#@ template debug="false" hostspecific="false" language="C#" #>
+﻿<#@ template debug="false" hostspecific="true" language="C#" #>
 <#@ assembly name="System.Core" #>
 <#@ assembly name="System.Windows.Forms" #>
+<#@ assembly name="$(SolutionDir)\BluePOCO\bin\Debug\ApiTransformer.dll" #>
+<#@ assembly name="$(SolutionDir)BluePOCO\bin\Debug\RestSharp.dll"#>
+<#@ import namespace="ApiTransformer"#>
 <#@ import namespace="System.Collections" #>
 <#@ import namespace="System.IO" #>
 <#@ import namespace="System" #>
@@ -8,33 +11,41 @@
 <#@ import namespace="System.Text" #>
 <#@ import namespace="System.Collections.Generic" #>
 <#@ import namespace="System.Reflection" #>
+<#@ import namespace="RestSharp"#>
 <#@ output extension=".cs" #>
 <#
 	var filename = "Source.txt";
-	var filepath = Path.Combine(Path.GetDirectoryName(this.Host.ResolvePath("")), "", filename);
+	var filepath = Path.Combine(Path.GetDirectoryName(this.Host.ResolvePath("")), "BluePOCO", filename);
+	var list = Transformer.GetMethodList(File.ReadAllText(filepath));
+	string str;
 #>
 using System.ComponentModel;
+using Restcoration;
+using RestSharp;
 namespace BluePOCO 
 {
-	
+
+	<#foreach(var item in list){#>
+
+	<#
+		var methodList = new List<string>();
+		foreach(var response in item.Responses)
+		{
+			//methodList.Add(string.Format("
+		}
+	#>
+
+
+	[Rest(Method = Method.<#=item.Method#>)]
+	public class <# str = item.Resource.Length > 1 ? string.Join("", item.Resource.Split('/').Select(x => x.Length > 0 ? x.Substring(0, 1).ToUpper() + x.Substring(1) : "")) : "Root";#><#=str + "Request"#>
+	{
+	}
+
+	<#foreach(var response in item.Responses){#>
+public class <#=str+response.Code#> 
+	{
+	}
+	<#}#>
+	<#}#>
+
 }
-<#+
-	public static string GetEmbeddedResourceText(string resourceName, Assembly resourceAssembly)
-        {
-            using (var stream = resourceAssembly.GetManifestResourceStream(resourceName))
-            {
-                var streamLength = (int)stream.Length;
-                var data = new byte[streamLength];
-                stream.Read(data, 0, streamLength);
-
-                if ((data[0] == 0xEF) && (data[1] == 0xBB) && (data[2] == 0xBF))
-                {
-                    var scrubbedData = new byte[data.Length - 3];
-                    Array.Copy(data, 3, scrubbedData, 0, scrubbedData.Length);
-                    data = scrubbedData;
-                }
-
-                return Encoding.UTF8.GetString(data);
-            }
-        }
-#>

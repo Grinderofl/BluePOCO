@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
-namespace BluePOCO
+namespace ApiTransformer
 {
     public class Transformer
     {
@@ -36,6 +34,7 @@ namespace BluePOCO
                     if (line.Contains("/"))
                     {
                         var stripped = line.Substring(line.IndexOf("/", System.StringComparison.Ordinal));
+                        stripped = stripped.Replace("]", "");
                         if (currentObject == null || !string.IsNullOrWhiteSpace(currentObject.Resource))
                             currentObject = new ApiObject() {Resource = stripped};
                         else
@@ -69,24 +68,5 @@ namespace BluePOCO
         }
 
 
-    }
-
-    public class ApiObject
-    {
-        public ApiObject()
-        {
-            Responses = new List<ResponseObject>();
-        }
-        public string Method { get; set; }
-        public string Resource { get; set; }
-        public List<ResponseObject> Responses { get; set; }
-        public ResponseObject Request { get; set; }
-    }
-
-    public class ResponseObject
-    {
-        public string Code { get; set; }
-        public string Type { get; set; }
-        public string Json { get; set; }
     }
 }
