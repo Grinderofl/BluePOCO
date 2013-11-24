@@ -1,0 +1,68 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Restcoration</name>
+    </assembly>
+    <members>
+        <member name="M:Restcoration.IRestClientFactory.Get``2(``1)">
+            <summary>
+            Attempts to request data from resource.
+            </summary>
+            <typeparam name="T">Expected response type</typeparam>
+            <typeparam name="T2">Request data type</typeparam>
+            <param name="requestData">Request data</param>
+            <returns>Response data, InvalidCastException or ArgumentException</returns>
+        </member>
+        <member name="M:Restcoration.IRestClientFactory.Get``1(``0)">
+            <summary>
+            Attempts to request data from resource, boxing it as object.
+            </summary>
+            <typeparam name="T">Request data type</typeparam>
+            <param name="requestData">Request data</param>
+            <returns>Response data, MissingFieldException or ArgumentException</returns>
+        </member>
+        <member name="P:Restcoration.RestAttribute.Method">
+            <summary>
+            Request method.
+            </summary>
+        </member>
+        <member name="P:Restcoration.RestAttribute.ResponseType">
+            <summary>
+            If no matching status code responses are specified, use this as default.
+            </summary>
+        </member>
+        <member name="P:Restcoration.RestAttribute.Resource">
+            <summary>
+            Resource to request.
+            </summary>
+        </member>
+        <member name="P:Restcoration.RestAttribute.RequestFormat">
+            <summary>
+            Format to request resource in.
+            </summary>
+        </member>
+        <member name="P:Restcoration.RestAttribute.Continue">
+            <summary>
+            Equivalent to HTTP status 100. System.Net.HttpStatusCode.Continue
+            indicates that the request should be continued.
+            </summary>
+        </member>
+        <member name="M:Restcoration.RestClientFactory.Get``2(``1)">
+            <summary>
+            Attempts to request data from resource.
+            </summary>
+            <typeparam name="T">Expected response type</typeparam>
+            <typeparam name="T2">Request data type</typeparam>
+            <param name="requestData">Request data</param>
+            <returns>Response data, InvalidCastException or ArgumentException</returns>
+        </member>
+        <member name="M:Restcoration.RestClientFactory.Get``1(``0)">
+            <summary>
+            Attempts to request data from resource, boxing it as object.
+            </summary>
+            <typeparam name="T">Request data type</typeparam>
+            <param name="requestData">Request data</param>
+            <returns>Response data, MissingFieldException or ArgumentException</returns>
+        </member>
+    </members>
+</doc>

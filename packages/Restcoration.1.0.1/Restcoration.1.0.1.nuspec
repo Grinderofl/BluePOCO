@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>Restcoration</id>
+    <version>1.0.1</version>
+    <title>Restcoration</title>
+    <authors>Nero Sule</authors>
+    <owners>Nero Sule</owners>
+    <projectUrl>https://github.com/Grinderofl/Restcoration</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Restcoration adds attributes that enable classes to be used for easily fetchable rest requests, in a domain-driven fashion.</description>
+    <summary>Use Domain Driven Design for Rest-requests.</summary>
+    <copyright>Nero Sule 2013</copyright>
+    <language>en-GB</language>
+    <dependencies>
+      <dependency id="Newtonsoft.Json" version="5.0.8" />
+      <dependency id="RestSharp" version="104.4.0" />
+    </dependencies>
+  </metadata>
+</package>
