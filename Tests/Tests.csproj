@@ -35,6 +35,10 @@
     <Reference Include="nunit.framework">
       <HintPath>..\packages\NUnit.2.6.3\lib\nunit.framework.dll</HintPath>
     </Reference>
+    <Reference Include="RestSharp, Version=104.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\RestSharp.104.4.0\lib\net4\RestSharp.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -61,6 +65,10 @@
     <ProjectReference Include="..\BluePOCO\BluePOCO.csproj">
       <Project>{BEA79CBA-5542-4202-B751-2D57A16EE0D4}</Project>
       <Name>BluePOCO</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\JsonCSharpClassGenerator\JsonCSharpClassGenerator.csproj">
+      <Project>{83E30F83-9E84-4DAD-8950-B932BAEA7197}</Project>
+      <Name>JsonCSharpClassGenerator</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

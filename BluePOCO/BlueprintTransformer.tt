@@ -9,6 +9,7 @@
 <#@ import namespace="System" #>
 <#@ import namespace="System.Linq" #>
 <#@ import namespace="System.Text" #>
+<#@ import namespace="System.Net"#>
 <#@ import namespace="System.Collections.Generic" #>
 <#@ import namespace="System.Reflection" #>
 <#@ import namespace="RestSharp"#>
@@ -22,29 +23,28 @@
 using System.ComponentModel;
 using Restcoration;
 using RestSharp;
+using Newtonsoft.Json; 
 namespace BluePOCO 
-{
-
-	<#foreach(var item in list){#>
+{	<#foreach(var item in list){#>
+	<# str = item.Resource.Length > 1 ? string.Join("", item.Resource.Split('/').Select(x => x.Length > 0 ? x.Substring(0, 1).ToUpper() + x.Substring(1) : "")) : "Root";#>
 
 	<#
-		var methodList = new List<string>();
+		var methodList = new List<string>(); 
 		foreach(var response in item.Responses)
 		{
-			//methodList.Add(string.Format("
+			methodList.Add(string.Format("{0} = typeof({1})", Enum.GetName(typeof (HttpStatusCode), int.Parse(response.Code)), str + response.Code));
 		}
+		string add; 
+		if(methodList.Any())
+			add = ", " + string.Join(", ", methodList);
+		else
+			add = "";
 	#>
+	
+	[Rest(Method = Method.<#=item.Method#><#=add#>)]<#foreach(var response in item.Responses){#>
 
+<#=ClassGenerator.Generate(response.Json, str+response.Code)#>
 
-	[Rest(Method = Method.<#=item.Method#>)]
-	public class <# str = item.Resource.Length > 1 ? string.Join("", item.Resource.Split('/').Select(x => x.Length > 0 ? x.Substring(0, 1).ToUpper() + x.Substring(1) : "")) : "Root";#><#=str + "Request"#>
-	{
-	}
-
-	<#foreach(var response in item.Responses){#>
-public class <#=str+response.Code#> 
-	{
-	}
 	<#}#>
 	<#}#>
 
