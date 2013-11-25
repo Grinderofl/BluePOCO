@@ -5,6 +5,9 @@ using System.Text.RegularExpressions;
 
 namespace ApiTransformer
 {
+    /// <summary>
+    /// Transforms Blueprint API into request and response objects
+    /// </summary>
     public class Transformer
     {
         private static readonly List<string> AllowedMethodValues = new List<string>()
@@ -14,6 +17,12 @@ namespace ApiTransformer
             "PUT",
             "DELETE"
         };
+
+        /// <summary>
+        /// Retrieves the method list
+        /// </summary>
+        /// <param name="source">Source blueprint</param>
+        /// <returns>List of api objects</returns>
         public static List<ApiObject> GetMethodList(string source)
         {
             var list = new List<ApiObject>();
