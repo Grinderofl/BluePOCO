@@ -22,6 +22,7 @@ namespace ApiTransformer
                     generator.UsePascalCase = true;
                     generator.UseProperties = true;
                     generator.MainClass = className;
+                    generator.UseNestedClasses = true;
                     generator.GenerateClasses();
                     sw.Flush();
                     ms.Position = 0;

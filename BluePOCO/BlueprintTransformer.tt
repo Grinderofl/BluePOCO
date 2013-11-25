@@ -15,18 +15,22 @@
 <#@ import namespace="RestSharp"#>
 <#@ output extension=".cs" #>
 <#
+    var nameSpace = "BluePOCO";
 	var filename = "Source.txt";
 	var filepath = Path.Combine(Path.GetDirectoryName(this.Host.ResolvePath("")), "BluePOCO", filename);
-	var list = Transformer.GetMethodList(File.ReadAllText(filepath));
+	
 	string str;
+    var url = "https://raw.github.com/Grinderofl/iMenzies/master/apiary.apib";
+    var textFromFile = (new WebClient()).DownloadString(url);
+    var list = Transformer.GetMethodList(textFromFile);
 #>
 using System.ComponentModel;
 using Restcoration;
 using RestSharp;
 using Newtonsoft.Json; 
-namespace BluePOCO 
+namespace <#=nameSpace#> 
 {	<#foreach(var item in list){#>
-	<# str = item.Resource.Length > 1 ? string.Join("", item.Resource.Split('/').Select(x => x.Length > 0 && !x.Contains("{") ? x.Substring(0, 1).ToUpper() + x.Substring(1) : "")) : "Root";#>
+	<# str = item.Resource.Length > 1 ? string.Join("", item.Resource.Split('/').Select(x => x.Length > 0 ? x.Replace("{", "").Replace("}","").Substring(0, 1).ToUpper() + x.Replace("{","").Replace("}", "").Substring(1) : "")) : "Root";#>
 
 	<#
 		var methodList = new List<string>(); 
@@ -34,18 +38,18 @@ namespace BluePOCO
 		{
 			methodList.Add(string.Format("{0} = typeof({1})", Enum.GetName(typeof (HttpStatusCode), int.Parse(response.Code)), str + response.Code));
 		}
-		string add;  
+		string addText; 
 		if(methodList.Any())
-			add = ", " + string.Join(", ", methodList);
-		else
-			add = "";
+			addText = ", " + string.Join(", ", methodList);
+		else 
+			addText = "";
 	#>
 	
 
-	[Rest(Method = Method.<#=item.Method#><#=add#>)]
-	<#=item.Request != null && item.Request.Json.Trim().Length > 0 ? ClassGenerator.Generate(item.Request.Json, str + "Request") : "public class " + str + "Request {}"#>
+	[Rest(Resource = "<#=item.Resource#>",Method = Method.<#=item.Method#><#=addText#>)]
+	<#=item.Request != null && item.Request.Json != null && item.Request.Json.Trim().Length > 0 ? ClassGenerator.Generate(item.Request.Json, str + "Request") : "public class " + str + "Request {}"#>
 	<#foreach(var response in item.Responses){#>
-	<#=ClassGenerator.Generate(response.Json, str+response.Code)#>
+	<#=response.Json != null && response.Json.Trim().Length > 0 ? ClassGenerator.Generate(response.Json, str+response.Code) : "public class " + str + response.Code + "{}"#>
 
 	<#}#>
 	<#}#>

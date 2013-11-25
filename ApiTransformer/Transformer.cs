@@ -19,7 +19,9 @@ namespace ApiTransformer
             var list = new List<ApiObject>();
             ApiObject currentObject = null;
             ResponseObject currentResponseObject = null;
-            foreach (var line in source.Split(new string[] {"\r\n", "\n"}, StringSplitOptions.RemoveEmptyEntries))
+            var collection = source.Split(new string[] {"\r\n", "\n"}, StringSplitOptions.RemoveEmptyEntries);
+            bool allowAdd = false;
+            foreach (var line in collection)
             {
                 
                 if (line.Trim().StartsWith("#"))
@@ -30,6 +32,7 @@ namespace ApiTransformer
                             currentObject = new ApiObject() {Method = AllowedMethodValues.First(line.Contains)};
                         else
                             currentObject.Method = AllowedMethodValues.First(line.Contains);
+                        allowAdd = true;
                     }
                     if (line.Contains("/"))
                     {
@@ -39,15 +42,17 @@ namespace ApiTransformer
                             currentObject = new ApiObject() {Resource = stripped};
                         else
                             currentObject.Resource = stripped;
+                        allowAdd = true;
                     }
                     if (currentObject != null && !string.IsNullOrWhiteSpace(currentObject.Method) &&
-                        !string.IsNullOrWhiteSpace(currentObject.Resource))
+                        !string.IsNullOrWhiteSpace(currentObject.Resource) && allowAdd)
                     {
                         list.Add(currentObject);
+                        allowAdd = false;
                     }
                     currentResponseObject = null;
                 }
-                if (line.StartsWith("+") && !line.Contains("Parameters") && currentObject != null)
+                if (line.StartsWith("+") && (line.Contains("Request") || line.Contains("Response"))&& currentObject != null)
                 {
                     currentResponseObject = new ResponseObject()
                     {
@@ -57,7 +62,11 @@ namespace ApiTransformer
                     if (line.ToLower().Contains("request"))
                         currentObject.Request = currentResponseObject;
                     else
-                        currentObject.Responses.Add(currentResponseObject);
+                    {
+                        if(currentObject.Responses.All(x => x.Code != currentResponseObject.Code))
+                            currentObject.Responses.Add(currentResponseObject);
+                    }
+                        
                 }
                 else if (currentResponseObject != null)
                 {

@@ -69,9 +69,6 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Source.txt" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\ApiTransformer\ApiTransformer.csproj">
       <Project>{e1794d4b-c7d9-496b-8a2e-982c7c2cf42d}</Project>
       <Name>ApiTransformer</Name>
