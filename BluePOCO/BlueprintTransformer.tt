@@ -26,7 +26,7 @@ using RestSharp;
 using Newtonsoft.Json; 
 namespace BluePOCO 
 {	<#foreach(var item in list){#>
-	<# str = item.Resource.Length > 1 ? string.Join("", item.Resource.Split('/').Select(x => x.Length > 0 ? x.Substring(0, 1).ToUpper() + x.Substring(1) : "")) : "Root";#>
+	<# str = item.Resource.Length > 1 ? string.Join("", item.Resource.Split('/').Select(x => x.Length > 0 && !x.Contains("{") ? x.Substring(0, 1).ToUpper() + x.Substring(1) : "")) : "Root";#>
 
 	<#
 		var methodList = new List<string>(); 
@@ -41,9 +41,11 @@ namespace BluePOCO
 			add = "";
 	#>
 	
-	[Rest(Method = Method.<#=item.Method#><#=add#>)]<#foreach(var response in item.Responses){#>
 
-<#=ClassGenerator.Generate(response.Json, str+response.Code)#>
+	[Rest(Method = Method.<#=item.Method#><#=add#>)]
+	<#=item.Request != null && item.Request.Json.Trim().Length > 0 ? ClassGenerator.Generate(item.Request.Json, str + "Request") : "public class " + str + "Request {}"#>
+	<#foreach(var response in item.Responses){#>
+	<#=ClassGenerator.Generate(response.Json, str+response.Code)#>
 
 	<#}#>
 	<#}#>

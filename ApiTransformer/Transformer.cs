@@ -47,7 +47,7 @@ namespace ApiTransformer
                     }
                     currentResponseObject = null;
                 }
-                if (line.StartsWith("+") && currentObject != null)
+                if (line.StartsWith("+") && !line.Contains("Parameters") && currentObject != null)
                 {
                     currentResponseObject = new ResponseObject()
                     {
