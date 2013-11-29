@@ -71,6 +71,9 @@ namespace <#=nameSpace#>
     
         public class <#=str + "Request"#>
         {
+<#            if(assign.Any()) {#>
+                public <#=str + "Request"#>(){}
+            <#            }#>
             public <#=str + "Request"#>(<#=ctor#>)
             {
                 <#            foreach(var item2 in assign) {#>
