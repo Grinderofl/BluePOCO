@@ -26,12 +26,36 @@ namespace Tests
         }
 
         [Test]
+        public void TestTransformation()
+        {
+            
+        }
+
+        [Test]
         public void TestDoohickey()
         {
             var transformed = Transformer.GetMethodList(_data);
-            string str = "/users/register";
-            //str = string.Join("", str.Split('/').Select(x => x.Length > 0 ? x.Substring(0, 1).ToUpper() + x.Substring(1) : "")) + "Request";
+            string str = "/users/register/{search}";
 
+            var parameterList = str.Split('/')
+                    .Where(x => x.Contains("{") && x.Contains("}"))
+                    .Select(x => x.Replace("{", "").Replace("}", ""))
+                    .ToList();
+
+            var ctor = string.Join(", ", parameterList.Select(x => string.Format("string {0}", x)));
+            var assign = parameterList.Select(x => string.Format("{0} = {1};", Helpers.NeatTitleCase(x), x));
+            var methods =
+                parameterList.Select(
+                    x =>
+                        string.Format("[JsonProperty(\"{2}\")]\r\npublic string {0} {{ {1} }}", Helpers.NeatTitleCase(x),
+                            "get; set;", x));
+
+            //str = string.Join("", str.Split('/').Select(x => x.Length > 0 ? x.Substring(0, 1).ToUpper() + x.Substring(1) : "")) + "Request";
+            var res =
+                str.Split('/')
+                    .Where(x => x.Contains("{") && x.Contains("}"))
+                    .Select(x => x.Replace("{", "").Replace("}", ""))
+                    .ToList();
             var item = Enum.GetName(typeof (HttpStatusCode), 200);
             foreach (var i in transformed)
             {

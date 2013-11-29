@@ -2,7 +2,8 @@
 <#@ assembly name="System.Core" #>
 <#@ assembly name="System.Windows.Forms" #>
 <#@ assembly name="$(SolutionDir)\BluePOCO\bin\Debug\ApiTransformer.dll" #>
-<#@ assembly name="$(SolutionDir)BluePOCO\bin\Debug\RestSharp.dll"#>
+<#@ assembly name="$(SolutionDir)\BluePOCO\bin\Debug\RestSharp.dll"#>
+<#@ assembly name="$(SolutionDir)\BluePOCO\bin\Debug\System.Data.Entity.Design.PluralizationServices.dll" #>
 <#@ import namespace="ApiTransformer"#>
 <#@ import namespace="System.Collections" #>
 <#@ import namespace="System.IO" #>
@@ -12,9 +13,10 @@
 <#@ import namespace="System.Net"#>
 <#@ import namespace="System.Collections.Generic" #>
 <#@ import namespace="System.Reflection" #>
+<#@ import namespace="System.Data.Entity.Design.PluralizationServices" #>
 <#@ import namespace="RestSharp"#>
 <#@ output extension=".cs" #>
-<#
+<# 
     var nameSpace = "BluePOCO";
 	var filename = "Source.txt";
 	var filepath = Path.Combine(Path.GetDirectoryName(this.Host.ResolvePath("")), "BluePOCO", filename);
@@ -24,7 +26,9 @@
     var textFromFile = (new WebClient()).DownloadString(url);
     var list = Transformer.GetMethodList(textFromFile);
 #>
+using System;
 using System.ComponentModel;
+using System.Collections.Generic;
 using Restcoration;
 using RestSharp;
 using Newtonsoft.Json; 
@@ -43,11 +47,43 @@ namespace <#=nameSpace#>
 			addText = ", " + string.Join(", ", methodList);
 		else 
 			addText = "";
+
+        var parameterList = item.Resource.Split('/')
+                    .Where(x => x.Contains("{") && x.Contains("}"))
+                    .Select(x => x.Replace("{", "").Replace("}", ""))
+                    .ToList();
+        
+        var ctor = string.Join(", ", parameterList.Select(x => string.Format("string {0}", x)));
+        var assign = parameterList.Select(x => string.Format("{0} = {1};", Helpers.NeatTitleCase(x), x));
+        var methods =
+            parameterList.Select(
+                x =>
+                    string.Format("[JsonProperty(\"{2}\")]\r\npublic string {0} {{ {1} }}", Helpers.NeatTitleCase(x),
+                        "get; set;", x)); 
 	#>
 	
+    
 
 	[Rest(Resource = "<#=item.Resource#>",Method = Method.<#=item.Method#><#=addText#>)]
-	<#=item.Request != null && item.Request.Json != null && item.Request.Json.Trim().Length > 0 ? ClassGenerator.Generate(item.Request.Json, str + "Request") : "public class " + str + "Request {}"#>
+	<#        if(item.Request != null && item.Request.Json != null && item.Request.Json.Trim().Length > 0) { #>
+    <#=                ClassGenerator.Generate(item.Request.Json, str + "Request")#>
+    <#        } else {#>
+    
+        public class <#=str + "Request"#>
+        {
+            public <#=str + "Request"#>(<#=ctor#>)
+            {
+                <#            foreach(var item2 in assign) {#>
+                <#=item2#>
+                <#            }#>
+            }
+            
+            <#            foreach(var item2 in methods){#>
+            <#=item2#>
+            <#            }#>
+        }
+    
+    <#}#>
 	<#foreach(var response in item.Responses){#>
 	<#=response.Json != null && response.Json.Trim().Length > 0 ? ClassGenerator.Generate(response.Json, str+response.Code) : "public class " + str + response.Code + "{}"#>
 
