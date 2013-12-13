@@ -14,6 +14,13 @@ This project is created to complement a RestSharper extension to provide domain 
 Github: https://github.com/Grinderofl/Restcoration
 NuGet: https://www.nuget.org/packages/Restcoration/
 
+Issues:
+T4 template generator loves locking assemblies, which means that after generating the POCOs, the files used by it remain locked and copying build files will fail. I've tried getting around it, but it's a whole lot of hustle which is just not worth it. So, I've gone for brute force solution which works quite well. Simply add this to your pre-build script:
+
+taskkill /f /fi "pid gt 0" /im T4VsHostProcess.exe
+
+This will kill the T4 transformer and release the assemblies.
+
 # Credits
 
 antiufo / Xamasoft for JSON C# Class Generator
